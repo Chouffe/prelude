@@ -21,3 +21,6 @@ session*
 .cask
 tramp
 /var/pcache
+.last-package-update-day
+.mc-lists.el
+helm-adaptive-history

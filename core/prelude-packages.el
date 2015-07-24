@@ -35,11 +35,26 @@
 (require 'cl)
 (require 'package)
 
+(setq load-prefer-newer t)
+
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 ;; set package-user-dir to be relative to Prelude install path
 (setq package-user-dir (expand-file-name "elpa" prelude-dir))
 (package-initialize)
+
+;; these two guys should be loaded as early as possible, and auto-update
+;; is more important than auto-compile
+(unless (package-installed-p 'auto-package-update)
+  (package-install 'auto-package-update))
+(require 'auto-package-update)
+(auto-package-update-maybe)
+
+(unless (package-installed-p 'auto-compile)
+  (package-install 'auto-compile))
+(require 'auto-compile)
+(auto-compile-on-load-mode 1)
+(auto-compile-on-save-mode 1)
 
 (defvar prelude-packages
   '(ace-window
