@@ -70,7 +70,6 @@
    evil-nerd-commenter
    hideshow-org
    hideshowvis
-   hungry-delete
    indent-guide
    ;; easy-kill       ;; prelude
    multiple-cursors
@@ -207,7 +206,7 @@
  '(comint-scroll-to-bottom-on-input (quote all))
  '(company-auto-complete t)
  '(company-auto-complete-chars (quote (32 40 46)))
- '(company-idle-delay 0.5)
+ '(company-idle-delay 0.3)
  '(company-minimum-prefix-length 2)
  '(default-tab-width 2 t)
  '(eshell-scroll-to-bottom-on-input (quote this))
@@ -358,7 +357,7 @@
   (setq sp-navigate-close-if-unbalanced t)
   (setq sp-successive-kill-preserve-whitespace 2)
   :bind (;; -- indentation
-         ("RET"      . indent-new-comment-line)
+         ("RET"           . indent-new-comment-line)
          ("<backtab>"     . sp-indent-defun)
          ;; -- moving
          ("C-<left>"      . sp-backward-sexp)
@@ -385,8 +384,14 @@
 ;; sexpr should end up at the beginning, not end of sexpr and then it
 ;; would make sense? 2. we should have a separate binding for slicing
 
+;; TODO: doens't work, key binding conflict, need to figure out how
+;; to set precedence 
+(use-package hungry-delete
+  :ensure t)
+
 ;; -- Helm
 
+;; TODO: put inside!
 (defun helm-resume-from ()
   (interactive)
   (helm-resume 1))
@@ -398,6 +403,8 @@
     (set-face-attribute 'helm-source-header nil :family "Menlo"
                         :weight 'normal :height 100)
     ;; TODO:
+    (require 'helm-buffers)
+;;    (require 'helm-core)
     (setq helm-always-two-windows               nil
           helm-adaptive-mode                    t   ;; TODO: ???
           helm-split-window-default-side        'other
@@ -429,6 +436,14 @@
           (concat "git grep -n%cH --color=always --exclude-standard"
                   " --no-index --full-name -e %p %f")
           helm-default-zgrep-command "zgrep --color=always -a -n%cH -e %p %f")
+    (use-package helm-ag
+      :ensure t
+      :defer t
+      :config
+      (setq helm-ag-fuzzy-match t
+            helm-ag-insert-at-point 'symbol
+            helm-ag-source-type 'file-line
+            helm-ag-use-agignore t))
     :bind
     (;;("<tab>"   . helm-execute-persistent-action)  ;; TODO:
      ;;("M-z"     . helm-select-action)
@@ -541,10 +556,30 @@
 (global-set-key (kbd "C-,") 'kmacro-start-macro-or-insert-counter)
 (global-set-key (kbd "C-.") 'kmacro-end-or-call-macro)
 
-;; rgrep
+;; rgrep & cider stacktrace
+(defun next-frame-or-error ()
+  (interactive)
+  (let ((error-buffer (get-buffer "*cider-error*")))
+    (if (not error-buffer)
+        (next-error)
+      (pop-to-buffer error-buffer)
+      (forward-line)
+      (cider-stacktrace-jump))))
+
+;; TODO: DRY
+(defun previous-frame-or-error ()
+  (interactive)
+  (let ((error-buffer (get-buffer "*cider-error*")))
+    (if (not error-buffer)
+        (previous-error)
+      (pop-to-buffer error-buffer)
+      (forward-line -1)
+      (cider-stacktrace-jump))))
+
+;;
 (global-set-key (kbd "M-g s") 'rgrep)
-(global-set-key (kbd "C->") 'next-error)      ;; Control + Shift + >
-(global-set-key (kbd "C-<") 'previous-error)  ;; Control + Shift + <
+(global-set-key (kbd "C->") 'next-frame-or-error)      ;; Control + Shift + >
+(global-set-key (kbd "C-<") 'previous-frame-or-error)  ;; Control + Shift + <
 
 ;; quick mode toggling and text properties
 (defun list-text-properties-at (&optional pos)
@@ -612,7 +647,6 @@
 (global-set-key (kbd "A-m a") 'mc/mark-all-like-this)
 
 ;; -- Autofill (very useful for writing comments)
-(setq fill-column 80)
 (add-hook 'clojure-mode-hook 'auto-fill-mode)
 
 ;; -- Clojure mode
@@ -624,7 +658,6 @@
 (setq open-paren-in-column-0-is-defun-start nil)
 (setq clojure--prettify-symbols-alist nil)
 
-(setq clojure-docstring-fill-column 80)
 (setq clojure-docstring-fill-prefix-width 3)
 
 ;; indentation
@@ -662,6 +695,9 @@
 (defclojureface clojure-java-call    "#4bcf68"   "Clojure Java calls")
 (defclojureface clojure-special      "#4682b4"   "Clojure special")
 (defclojureface clojure-double-quote "#4682b4"   "Clojure double quote")
+
+;; TODO: clojure's (comment) should be highlighted as a comment
+;; (maybe they do it in the latest version already?)
 
 (defun replacement (txt)
   `(0 (progn
@@ -1158,6 +1194,10 @@
 
 ;; --- CIDER
 
+(defun cider-local ()
+  (interactive)
+  (cider-connect "127.0.0.1" 12121))
+
 (use-package cider
   :ensure t
   :config
@@ -1170,8 +1210,11 @@
         cider-auto-select-error-buffer t
         cider-repl-display-in-current-window nil
         cider-repl-use-clojure-font-lock t
-        cider-repl-tab-command 'indent-for-tab-command)
-  (cider-repl-toggle-pretty-printing)
+        cider-repl-tab-command 'indent-for-tab-command
+        cider-repl-history-file (concat (expand-file-name backup-directory)
+                                        "cider-repl-history")
+        cider-repl-history-size 2000
+        cider-repl-use-pretty-printing t)
   (add-hook 'cider-repl-mode-hook (lambda ()
                                     (bind-keys
                                      :map cider-repl-mode-map
@@ -1198,10 +1241,6 @@
 ;;(add-hook 'cider-repl-mode-hook 'clojure-mode)
 
 ;;(add-hook 'cider-repl-mode-hook 'paredit-mode)
-
-(defun cider-local ()
-  (interactive)
-  (cider-connect "127.0.0.1" 12121))
 
 ;; -- Autocomplete (in mini-buffer)
 (require 'icomplete)
@@ -1232,15 +1271,30 @@
 (use-package magit
   :ensure t
   :config
+  ;; TODO: DRY
   (global-unset-key (kbd "C-x g"))
   (global-unset-key (kbd "C-x M-g"))
-  (global-set-key (kbd "C-g")   'goto-line)
-  (global-set-key (kbd "M-g")   (make-sparse-keymap))
-  (global-set-key (kbd "M-g g") 'magit-status)
-  (global-set-key (kbd "M-g d") 'magit-dispatch-popup)
-  (global-set-key (kbd "M-g l") 'magit-log)
-  (global-set-key (kbd "M-g f") 'magit-log-buffer-file)
-  (global-set-key (kbd "M-g b") 'magit-blame))
+  (global-set-key   (kbd "C-g")             'goto-line)
+  (global-set-key   (kbd "M-g")             (make-sparse-keymap))
+  (global-set-key   (kbd "M-g M-g")         'magit-status)
+  (global-set-key   (kbd "M-g m")           'magit-commit)
+  (global-set-key   (kbd "M-g P")           'magit-push)
+  (global-set-key   (kbd "M-g d")           'magit-diff)
+  (global-set-key   (kbd "M-g c")           'magit-checkout)
+  (global-set-key   (kbd "M-g g")           'magit-dispatch-popup)
+  (global-set-key   (kbd "M-g l")           'magit-log)
+  (global-set-key   (kbd "M-g f")           'magit-log-buffer-file)
+  (global-set-key   (kbd "M-g b")           'magit-blame)
+  (global-set-key   (kbd "M-g <backspace>") 'magit-file-delete)
+  (global-set-key   (kbd "M-g n")           'smerge-next)
+  (global-set-key   (kbd "M-g p")           'smerge-prev)
+  ;; (k)eep or (t)ake
+  (global-set-key   (kbd "M-g k b")         'smerge-keep-base)  
+  (global-set-key   (kbd "M-g t b")         'smerge-keep-base)   
+  (global-set-key   (kbd "M-g k m")         'smerge-keep-mine)
+  (global-set-key   (kbd "M-g t m")         'smerge-keep-mine)
+  (global-set-key   (kbd "M-g k o")         'smerge-keep-other)
+  (global-set-key   (kbd "M-g t o")         'smerge-keep-other))
 
 ;; -- Finding any file in the current git repository
 (add-to-list 'load-path "~/.emacs.d.current/modules/find-file-in-repository")
@@ -1268,8 +1322,7 @@
   (workgroups-mode 1)
   (setq loaded-once t))
 
-;;  the bindings we use which are also defined in Prelude
-
+;; the bindings we use which are also defined in Prelude
 (define-key prelude-mode-map (kbd "C--") nil)
 (define-key prelude-mode-map (kbd "C-_") nil)
 (define-key prelude-mode-map (kbd "C-=") nil)
@@ -1278,5 +1331,5 @@
 (define-key prelude-mode-map (kbd "M-o") nil)
 (define-key prelude-mode-map (kbd "C-c w") nil)
 
+(message "Initialization succesfull")
 
-;;(message (format "==%S" load-path))
