@@ -1230,8 +1230,6 @@
   (("C-c C-l"    . cider-local)
    ("C-c C-d"    . cider-switch-to-repl-buffer)))
 
-(require 'cider-macroexpansion)
-
 ;; TODO: do we actually need it/or taken care by Prelude???
 (add-hook 'cider-mode-hook 'eldoc-mode)
 (add-hook 'clojure-mode-hook 'eldoc-mode)
