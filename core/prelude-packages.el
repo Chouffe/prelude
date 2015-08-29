@@ -39,19 +39,33 @@
 
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
 ;; set package-user-dir to be relative to Prelude install path
 (setq package-user-dir (expand-file-name "elpa" prelude-dir))
 (package-initialize)
 
+(if (require 'quelpa nil t)
+    (quelpa-self-upgrade)
+  (with-temp-buffer
+    (url-insert-file-contents
+     "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+    (eval-buffer)))
+;;TODO: (setq quelpa-upgrade-p t)
+(setq quelpa-upgrade-p nil)
+(quelpa 'quelpa-use-package)
+(require 'quelpa-use-package)
+
 ;; these two guys should be loaded as early as possible, and auto-update
 ;; is more important than auto-compile
-(unless (package-installed-p 'auto-package-update)
-  (package-install 'auto-package-update))
-(require 'auto-package-update)
-(auto-package-update-maybe)
+;; NOTE: quelpa should handle this
+;; (unless (package-installed-p 'auto-package-update)
+;;   (quelpa 'auto-package-update))
+;; (require 'auto-package-update)
+;; (auto-package-update-maybe)
 
 (unless (package-installed-p 'auto-compile)
-  (package-install 'auto-compile))
+  (quelpa 'auto-compile))
 (require 'auto-compile)
 (auto-compile-on-load-mode 1)
 (auto-compile-on-save-mode 1)
@@ -62,7 +76,6 @@
     anzu
     browse-kill-ring
     dash
-    discover-my-major
     diff-hl
     diminish
     easy-kill
@@ -73,20 +86,18 @@
     git-timemachine
     gitconfig-mode
     gitignore-mode
-    god-mode
     grizzl
-    guru-mode
     ov
     projectile
     magit
     move-text
     operate-on-number
     smart-mode-line
-    smartparens
+    sm
+    artparens
     smartrep
     undo-tree
     volatile-highlights
-    zenburn-theme
     zop-to-char)
   "A list of packages to ensure are installed at launch.")
 
@@ -99,7 +110,7 @@
   (unless (memq package prelude-packages)
     (add-to-list 'prelude-packages package))
   (unless (package-installed-p package)
-    (package-install package)))
+    (quelpa package)))
 
 (defun prelude-require-packages (packages)
   "Ensure PACKAGES are installed.
@@ -137,7 +148,7 @@ PACKAGE is installed only if not already present.  The file is opened in MODE."
   `(add-to-list 'auto-mode-alist
                 `(,extension . (lambda ()
                                  (unless (package-installed-p ',package)
-                                   (package-install ',package))
+                                   (quelpa ',package))
                                  (,mode)))))
 
 (defvar prelude-auto-install-alist
