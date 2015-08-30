@@ -71,7 +71,8 @@
 (auto-compile-on-save-mode 1)
 
 (defvar prelude-packages
-  '(ace-window
+  '(;; indented means not loooked at
+    ace-window
     avy
     anzu
     browse-kill-ring
@@ -86,6 +87,7 @@
     git-timemachine
     gitconfig-mode
     gitignore-mode
+    god-mode
     grizzl
     ov
     projectile

@@ -420,13 +420,6 @@
 (global-set-key (kbd "C-<")                    
                 (lambda () (interactive) (navigate-frames-or-rgrep -1)))      
 
-;; --------
-;; Org-mode
-;; --------
-
-(use-package fetcher
-  :quelpa (org-mode :fetcher github :repo "aboytsov/org-mode.git"))
-
 ;; -----------
 ;; Smartparens
 ;; -----------
@@ -630,7 +623,7 @@
   (global-aggressive-indent-mode))
 
 (use-package clojure-mode
-  :quelpa t
+  :quelpa (clojure-mode :fetcher github :repo "aboytsov/clojure-mode")
   :demand t
   :config
   (setq open-paren-in-column-0-is-defun-start nil
@@ -776,7 +769,6 @@
                 (font-lock-add-keywords 'clojure-mode clojure-font-locks)
                 (auto-fill-mode)                   ;; useful for comments
                 (highlight-parentheses-mode)
-                (orgtbl-mode)                      ;; Midje tests
                 (message "Clojure mode initialized")))))
 
 ;; ---------------
@@ -812,6 +804,15 @@
 ;;   :demand t
 ;;   :config
 ;;   (add-hook 'clojure-mode-hook 'hungry-delete-mode))
+
+;; --------
+;; Org-mode
+;; --------
+
+(use-package org
+  :quelpa (org-mode :fetcher github :repo "aboytsov/org-mode")
+  :config
+  (add-hook 'clojure-mode-hook 'orgtbl-mode))
 
 ;; -----
 ;; CIDER
