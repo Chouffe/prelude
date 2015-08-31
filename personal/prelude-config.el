@@ -56,7 +56,6 @@
   (setq hook nil))
 (setq font-lock-keywords-alist nil)
 
-(load-file "~/.emacs.d.current/utils.el")
 (load-file (concat "~/.emacs.d.current/profile-"
                    (getenv "EMACS_PROFILE") ".el"))
 
@@ -629,6 +628,7 @@
   (setq open-paren-in-column-0-is-defun-start nil
         clojure--prettify-symbols-alist nil
         clojure-docstring-fill-prefix-width 3
+        clojure-docstring-fill-column 80
         clojure-use-backtracking-indent nil)
 
   ;; -- indentation

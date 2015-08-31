@@ -57,7 +57,6 @@
 (quelpa 'quelpa-use-package :stable nil)
 (require 'quelpa-use-package)
 
-;; Packages without stable versions
 (quelpa 'volatile-highlights :stable nil)
 (quelpa 'undo-tree :stable nil)
 (quelpa 'god-mode :stable nil)

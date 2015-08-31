@@ -150,9 +150,17 @@ nil
 (butlast a)
 
 ;; -- indentation
+
+;; function parameters
+(func :a :b
+      :c :d)
+(func
+  :a :b
+  :c)
+
 ;; TODO: indentation in let and in maps as below
 (let [variable-name
-    (very-log-value)]
+      (very-log-value)]
   {:key-1
    (a-very-long-function-call arg1 arg2)
    :key-1
@@ -216,8 +224,8 @@ nil
   3)
 
 (nil [1 2
-    3 4]
-   5)
+      3 4]
+  5)
 
 (nil f [1 2
       3 4]

@@ -26,11 +26,11 @@
 (require 'prelude-lisp)
 ;; (require 'prelude-ocaml)
 (require 'prelude-org) ;; Org-mode helps you keep TODO lists, notes and more
-(require 'prelude-perl)
-(require 'prelude-python)
+;; (require 'prelude-perl)
+;; (require 'prelude-python)
 ;; (require 'prelude-ruby)
-(require 'prelude-scala)
-(require 'prelude-scheme)
+;; (require 'prelude-scala)
+;; (require 'prelude-scheme)
 (require 'prelude-shell)
 (require 'prelude-scss)
 (require 'prelude-web) ;; Emacs mode for web templates
