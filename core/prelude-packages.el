@@ -53,8 +53,22 @@
     (eval-buffer)))
 ;;TODO: (setq quelpa-upgrade-p t)
 (setq quelpa-upgrade-p nil)
-(quelpa 'quelpa-use-package)
+(setq quelpa-stable-p t)
+(quelpa 'quelpa-use-package :stable nil)
 (require 'quelpa-use-package)
+
+;; Packages without stable versions
+(quelpa 'volatile-highlights :stable nil)
+(quelpa 'undo-tree :stable nil)
+(quelpa 'god-mode :stable nil)
+(quelpa 'vkill :stable nil)
+(quelpa 'helm-projectile :stable nil)
+(quelpa 'helm-descbinds :stable nil)
+(quelpa 'key-chord :stable nil)
+;; doesn't install from gnu repostirory for some reason
+(quelpa '(rainbow-mode :fetcher github
+		       :repo "emacsmirror/rainbow-mode")
+        :stable nil)
 
 ;; these two guys should be loaded as early as possible, and auto-update
 ;; is more important than auto-compile

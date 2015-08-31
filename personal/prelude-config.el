@@ -246,7 +246,7 @@
 (setq undo-limit 100000)
 
 (use-package undo-tree
-  :quelpa t
+  :quelpa (:stable nil)
   :demand t
   :config
   (setq undo-tree-auto-save-history t
@@ -491,6 +491,7 @@
   :quelpa t
   :demand t
   :init
+  (quelpa 'epl :stable nil)
   (use-package helm
     :quelpa t
     :bind
@@ -555,9 +556,6 @@
   (setq projectile-enable-caching t)
   (global-unset-key (kbd "C-x b"))
   (global-unset-key (kbd "C-x C-b"))
-  (use-package helm-projectile
-    :quelpa t
-    :demand t)
   :bind
   (("C-x C-l" . helm-projectile-find-file-dwim)
    ("C-x s"   . helm-projectile-switch-project)
@@ -623,7 +621,9 @@
   (global-aggressive-indent-mode))
 
 (use-package clojure-mode
-  :quelpa (clojure-mode :fetcher github :repo "aboytsov/clojure-mode")
+  :quelpa (clojure-mode :fetcher github
+                        :repo "aboytsov/clojure-mode"
+                        :stable nil)
   :demand t
   :config
   (setq open-paren-in-column-0-is-defun-start nil
@@ -810,7 +810,9 @@
 ;; --------
 
 (use-package org
-  :quelpa (org-mode :fetcher github :repo "aboytsov/org-mode")
+  :quelpa (org-mode :fetcher github
+                    :repo "aboytsov/org-mode"
+                    :stable nil)
   :config
   (add-hook 'clojure-mode-hook 'orgtbl-mode))
 
@@ -823,7 +825,7 @@
   (cider-connect "127.0.0.1" 12121))
 
 (use-package cider
-  :quelpa t
+  :quelpa (:stable t)
   :demand t           
   :bind
   ;; TODO: this still doesn't work conflicts with look up symbol + doc
@@ -849,10 +851,10 @@
         cider-repl-use-pretty-printing t)
   (add-hook 'cider-repl-mode-hook
             (lambda () (bind-keys :map cider-repl-mode-map
-                                  ("M-<up>"     . cider-repl-previous-input)
-                                  ("M-<down>"   . cider-repl-next-input)
-                                  ("M-S-<up>"   . cider-repl-previous-prompt)
-                                  ("M-S-<down>" . cider-repl-next-prompt))))
+                             ("M-<up>"     . cider-repl-previous-input)
+                             ("M-<down>"   . cider-repl-next-input)
+                             ("M-S-<up>"   . cider-repl-previous-prompt)
+                             ("M-S-<down>" . cider-repl-next-prompt))))
   ;; TODO: do we actually need it/or taken care by Prelude???
   ;;  (add-hook 'cider-mode-hook 'eldoc-mode)
   ;;  (add-hook 'clojure-mode-hook 'eldoc-mode)
@@ -900,7 +902,7 @@
 ;; -----
 
 (use-package diff-hl
-  :quelpa t
+  :quelpa (:stable nil)
   :config
   (global-diff-hl-mode 1)
   :bind (("M->" . diff-hl-next-hunk)
@@ -1205,7 +1207,7 @@
 
 ;; according to the docs, it needs to be at the bottom of the init.el
 (use-package workgroups2
-  :quelpa t
+  :quelpa (:stable nil)
   :demand t
   :config
   (workgroups-mode 1)
