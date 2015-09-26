@@ -2,6 +2,31 @@
 ;; Symbols
 ;; -------
 
+;; -- functions
+(fn [x] (+ x 2))                
+(fn+ recover [x] (+ x 2))        ;; TODO: must be colored as a keyword
+#(+ % 2)                        ;; TODO: lambda
+#fn(+ % 2)                      ;; TODO: stroked lambda (U+019B)
+#fn{:a 1}
+#fn 1
+
+;; -- bindings
+(let [a 1                         ;; TODO: rainbow symbols
+    b 2]
+  (+ a b))
+
+;; -- definitions
+(defn func [x] (+ x 2))           ;; TODO: 'func' should be bold
+(defn+ func [recover log-debug]
+  [x]
+  (+ x 2))
+(defmacro macro [x] (+ x 2))
+
+;; -------------------
+;; Syntax highlighting
+;; -------------------
+
+
 ;; TODO: cond condp etc
 
 ;; -- general

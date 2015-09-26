@@ -1,3 +1,7 @@
 #!/usr/local/bin/fontforge -lang=ff
-Open("Menlo-Clojure.sfd")
-Generate(GetEnv("HOME") + "/Library/Fonts/Menlo-Clojure.ttf")
+Open("Menlo-Clojure-Regular.sfd")
+Generate(GetEnv("HOME") + "/Library/Fonts/Menlo-Clojure-Regular.ttf")
+Open("Menlo-Clojure-Bold.sfd")
+Generate(GetEnv("HOME") + "/Library/Fonts/Menlo-Clojure-Bold.ttf")
+Open("Menlo-Clojure-Italic.sfd")
+Generate(GetEnv("HOME") + "/Library/Fonts/Menlo-Clojure-Italic.ttf")
