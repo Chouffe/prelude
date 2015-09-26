@@ -130,9 +130,9 @@
 ;; -- superscript
 ;; - numbers
 (⁰ a b)  ;; superscript 0 (0x2070)
-(¹ a b) ;; onesuperior (0x00B9)
-(² a b) ;; twosuperior (0x00B2)
-(³ a b) ;; threesuperior (0x00B3)
+(¹ a b)  ;; onesuperior (0x00B9)
+(² a b)  ;; twosuperior (0x00B2)
+(³ a b)  ;; threesuperior (0x00B3)
 (⁴ a b)  ;; superscript 4 (0x2074)
 (⁵ a b)  ;; superscript 5 (0x2075)
 (⁶ a b)  ;; superscript 6 (0x2076)

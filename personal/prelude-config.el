@@ -631,125 +631,10 @@
         clojure-docstring-fill-column 80
         clojure-use-backtracking-indent nil)
 
-  ;; -- indentation
-  ;; TODO: consolidate
-  (mapc (lambda (x) (put-clojure-indent x 1))
-        '(if-let if-not-let when-let when-not-let
-                 if-nil if-not-nil when-nil when-not-nil
-                 if-nil-let if-not-nil-let when-nil-let when-not-nil-let
-                 if-empty if-not-empty when-empty when-not-empty
-                 if-empty-let if-not-empty-let when-empty-let when-not-empty-let
-                 if-coll if-not-coll when-coll when-not-coll
-                 if-coll-let if-not-coll-let when-coll-let when-not-coll-let
-                 if-list if-not-list when-list when-not-list
-                 if-list-let if-not-list-let when-list-let when-not-list-let
-                 if-vector if-not-vector when-vector when-not-vector
-                 if-vector-let if-not-vector-let
-                 when-vector-let when-not-vector-let
-                 if-string if-not-string when-string when-not-string
-                 if-string-let if-not-string-let when-string-let
-                 when-not-string-let
-                 match match-fn))
-  (mapc (lambda (x) (put-clojure-indent x 'defun))
-        '(defn+ fn+ facts fact tabular decorate catch-all catch+ update-error))
-
-  ;; -- syntax highlighting
-  ;; TODO:
-  ;; 1. (comment + 1 2) and #_(+ 1 2) should be highlighted same as comments
-  ;; 2. Try italic fonts
-  ;; 3. Take a look at clojure-mode-extra-font-lock package
-  ;; 4. try+/throw+ like try/throw
-
-  ;; TODO: this seems unnecessarily custom, see what the default is
-  ;; (font-lock-add-keywords 'clojure-mode clojure-font-locks) <= is this?
-  (defmacro defclojureface (name color desc &optional others)
-    `(defface ,name
-       '((((class color)) (:foreground ,color ,@others))) ,desc :group 'faces))
-
-  (defclojureface clojure-parens       "#999999"   "Clojure parens")
-  (defclojureface clojure-braces       "#49b2c7"   "Clojure braces")
-  (defclojureface clojure-brackets     "#4682b4"   "Clojure brackets")
-  (defclojureface clojure-keyword      "#2e8b57"   "Clojure keywords")
-  (defclojureface clojure-namespace    "#c476f1"   "Clojure namespace")
-  (defclojureface clojure-java-call    "#4bcf68"   "Clojure Java calls")
-  (defclojureface clojure-special      "#4682b4"   "Clojure special")
-  (defclojureface clojure-double-quote "#4682b4"   "Clojure double quote")
-
-  ;; -- symbol replacement
+  (load-file "../clojure-syntax/indentation.el")
+  (load-file "../clojure-syntax/syntax.el")
+  (load-file "../clojure-syntax/symbols.el")
   
-  ;; TODO:
-  ;; 1. finish and clean up
-  ;; 2. ++ and -- as one symbol
-  ;; 3. parens with indexes for highlights?
-  ;; 4. reverse
-  ;; 5. loop/recur
-  ;; 6. if/when/cond
-  ;; 7. exceptions
-
-  (defun replacement (txt)
-    `(0 (progn
-          (when (not (member (get-text-property (match-beginning 1) 'face)
-                             '(font-lock-comment-face
-                               font-lock-string-face
-                               font-lock-doc-face)))
-            ;; TODO: resolve the overlay vs. text-property question
-            (put-text-property (match-beginning 1) (match-end 1) 'display ,txt))
-          ;; TODO: help-echo
-          nil)))
-
-  (defvar clojure-font-locks
-    (nconc
-     ;; TODO:
-     ;; 1. what is <?
-     ;; 2. different font face for doc?
-     ;; 3. Look at ov (https://github.com/ShingoFukuyama/ov.el)
-     `(("\\<\\(DOC\\|FIX\\|FIXME\\|TODO\\|BUG\\|CODEQUALITY\\):"
-        1 font-lock-warning-face t))
-     (mapcar (lambda (pair) `(,(first pair) . ,(replacement (second pair))))
-             ;; TODO: instead of '(' need to detect if those symbols are
-             ;; keywords
-             '(("(\\(fn\\)[\[[:space:]]" "ƒ")
-               ;; TODO: bigger plus here
-               ("(\\(fn\\+\\)[\[[:space:]]" "ƒ⁺")
-               ("\\b\\(defn\\)\\b"
-                (concat
-                 (propertize "∎" 'face 'bold)
-                 (propertize "ƒ" 'help-echo "help-text")))
-               ("\\b\\(defn\\+\\)\\b"
-                (concat
-                 (propertize "∎" 'face 'bold)
-                 (propertize "ƒ⁺" 'help-echo "help-text")))
-               ("\\b\\(defmacro\\)\\b"
-                (concat
-                 (propertize "∎" 'face 'bold)
-                 (propertize "Ƒ" 'help-echo "help-text")))
-               ("\\b\\(def\\)\\b" (propertize "∎" 'face 'bold))
-               ("\\b\\(complement\\|!\\)\\b" "∁")
-               ("\\(comp\\|[|]\\)\\(\\b\\| \\)" "∘")
-               ("\\b\\(not\\)\\b" "¬")
-               ("\\b\\(min\\)\\b" "꜖")
-               ("\\b\\(max\\)\\b" "꜒")
-               ;; TODO: vector versions
-               ("\\b\\(nil\\)\\b" "∅")
-               ("\\b\\(if-nil\\)\\b" "if-∅")
-               ("\\b\\(nil\\?\\)\\b" "∄")
-               ("\\b\\(some\\?\\)\\b" "∃")
-               ("\\b\\(con>\\)\\b" "☰")
-               ("\\b\\(con<\\)\\b" "☱")
-               ("\\b\\(concat\\)\\b" "☲")
-               ("\\b\\(\\*>\\)\\b" "λ…")
-               ("\\b\\(partial\\)\\b" "λ…")
-               ("\\b\\(\\*<\\)\\b" "…λ")
-               ("\\b\\(let\\)\\b" "∎")
-               ("\\b\\(ns\\)\\b" "§")
-               ("\\b\\(map\\)\\b" "↦")
-               ("\\b\\(last\\)\\b" "↩")
-               ("\\b\\(first\\)\\b" "↪")
-               ("\\b\\(for\\)\\b" "∀")
-               ("\\b\\(not=\\)\\b" "≠")
-               ("\\b\\(<=\\)\\b" "≤")
-               ("\\b\\(>=\\)\\b" "≥")))))
-
   ;; -- parenthesis highlighting
   ;; TODO: better colors, maybe slightly darker background or symbols?
   ;; subscript as in )1 )2 )3 etc? - this is probably better
@@ -1206,11 +1091,13 @@
 ;; --------
 
 ;; according to the docs, it needs to be at the bottom of the init.el
-(use-package workgroups2
-  :quelpa (:stable nil)
-  :demand t
-  :config
-  (workgroups-mode 1)
-  ;; below is emacs built-in
-  (savehist-mode 1)
-  (setq savehist-file (concat backup-directory "savehist")))
+;; kills Helm performance?
+;; https://github.com/emacs-helm/helm/issues/936
+;; (use-package workgroups2
+;;   :quelpa (:stable nil)
+;;   :demand t
+;;   :config
+;;   (workgroups-mode 1)
+;;   ;; below is emacs built-in
+;;   (savehist-mode 1)
+;;   (setq savehist-file (concat backup-directory "savehist")))

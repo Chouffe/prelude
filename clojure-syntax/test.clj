@@ -1,4 +1,6 @@
-(let [a b c d e f g h])
+;; -------
+;; Symbols
+;; -------
 
 ;; TODO: cond condp etc
 
@@ -158,9 +160,15 @@ nil
   :a :b
   :c)
 
+;; TODO:
+(def get-by-url
+  (let [{:keys [results_count]
+       [{:keys [images name]}] :results}
+        (->> (cache/wrap (db/cache :api-semantics3) query))]))
+
 ;; TODO: indentation in let and in maps as below
 (let [variable-name
-      (very-log-value)]
+    (very-log-value)]
   {:key-1
    (a-very-long-function-call arg1 arg2)
    :key-1
