@@ -64,6 +64,7 @@
 (quelpa 'helm-projectile :stable nil)
 (quelpa 'helm-descbinds :stable nil)
 (quelpa 'key-chord :stable nil)
+(quelpa 'diff-hl :stable nil)
 ;; doesn't install from gnu repostirory for some reason
 (quelpa '(rainbow-mode :fetcher github
 		       :repo "emacsmirror/rainbow-mode")
