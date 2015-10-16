@@ -30,21 +30,12 @@
       1 font-lock-warning-face t))
    (mapcar
     (lambda (pair) `(,(first pair) . ,(replacement (second pair))))
-    '(("(\\(fn\\)[\[[:space:]]"    "ƒ")
-      ("(\\(fn\\+\\)[\[[:space:]]" "ƒ⁺")    ;; TODO: a bigger +
-      ("\\b\\(defn\\)\\b"
-       (concat
-        (propertize "∎" 'face 'bold)
-        (propertize "ƒ" 'help-echo "help-text")))
-      ("\\b\\(defn\\+\\)\\b"
-       (concat
-        (propertize "∎" 'face 'bold)
-        (propertize "ƒ⁺" 'help-echo "help-text")))
-      ("\\b\\(defmacro\\)\\b"
-       (concat
-        (propertize "∎" 'face 'bold)
-        (propertize "Ƒ" 'help-echo "help-text")))
-      ("\\b\\(def\\)\\b" (propertize "∎" 'face 'bold))
+    '(("(\\(fn\\)[\[[:space:]]"     "ƒ")
+      ("(\\(fn\\+\\)[\[[:space:]]"  "ƒ⁺")    ;; TODO: a bigger +
+      ("\\b\\(defn\\)\\b"           (concat (propertize "∎" 'face 'bold) "ƒ"))
+      ("\\b\\(defn\\+\\)\\b"        (concat (propertize "∎" 'face 'bold) "ƒ⁺"))
+      ("\\b\\(defmacro\\)\\b"       (concat (propertize "∎" 'face 'bold) "Ƒ"))
+      ("\\b\\(def\\)\\b"            (propertize "∎" 'face 'bold))
       ("\\b\\(complement\\|!\\)\\b" "∁")
       ("\\(comp\\|[|]\\)\\(\\b\\| \\)" "∘")
       ("\\b\\(not\\)\\b" "¬")

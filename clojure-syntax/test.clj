@@ -1,60 +1,78 @@
-;; -------
-;; Symbols
-;; -------
+;; -----------------------------------
+;; Mathematical symbols/prettification
+;; -----------------------------------
 
 ;; -- functions
 (fn [x] (+ x 2))                
-(fn+ recover [x] (+ x 2))        ;; TODO: must be colored as a keyword
-#(+ % 2)                        ;; TODO: lambda
-#fn(+ % 2)                      ;; TODO: stroked lambda (U+019B)
+(fn+ recover [x] (+ x 2))         ;; TODO: must be colored as a keyword
+#(+ % 2)                         ;; TODO: lambda
+#fn(+ % 2)                       ;; TODO: stroked lambda (U+019B)
 #fn{:a 1}
 #fn 1
 
 ;; -- bindings
-(let [a 1                         ;; TODO: rainbow symbols
+(let [a 1                          ;; TODO: rainbow symbols
     b 2]
   (+ a b))
 
 ;; -- definitions
-(defn func [x] (+ x 2))           ;; TODO: 'func' should be bold
+(def var 1)                        ;; TODO: 'var' should be bold
+(defn func [x] (+ x 2))            ;; TODO: 'func' should be bold
 (defn+ func [recover log-debug]
   [x]
   (+ x 2))
 (defmacro macro [x] (+ x 2))
 
+;; -- combinators
+(! empty?)                       ;; complement
+(complement empty?)
+
+;; TODO:
+;; 1. if/when
+;; 2. cond/condp etc.
+;; 3. con> con< concat union etc.
+;; 4. transforms
+
 ;; -------------------
 ;; Syntax highlighting
 ;; -------------------
 
-
-;; TODO: cond condp etc
-
 ;; -- general
-;; 80 character warning sign ---------------------------------------------- hereOVER LIMIT
-;; Comment
+;; 80 character warning sign -----------------------------------------------here OVER LIMIT
+
+;; -- parents
+((parens-are-dimmed-a-little) a b c)
+
+;; -- strings
+"Sequence of characters"           ;; TODO: different color from comments
+#"regexp"                          ;; TODO: different color from comments
+
+;; -- comments
+;; Comment                         ;; TODO: try italic for comments or strings
 ;; TODO: to do
 ;; FIXME: fix me
 ;; BUG: bug
 
-(a b c d)
+(comment (func 1 2 3))             ;; TODO: both should change color as well
+#_(func 1 2 3)
 
-(    let (a b c d e f))
+;; -- specials
+true
+false
+nil
 
-(a)
+;; -- keywords
+:keyword
 
-(a (
-    a v))
 
-(let [a b c d e f g h])
 
-((parens-are-dimmed-a-little)
- a
- b
- c
- )
 
-"A string is a sequence of characters"
-#"regexp"
+
+
+
+
+
+
 
 []
 {}
@@ -62,18 +80,11 @@
 [] {} #{}
 [data] {data} #{data}
 
-true false nil    ;; specials
-:keyword1 :keyword2
 
 % %1 %2           ;; lambda params (TODO: prettify)
 @deref
 #'var
 
-;; TODO: comments including this one
-(comment
-  (defn
-    (code)
-    (code)))
 
 ;; -- macro-writing
 ~data
@@ -388,10 +399,10 @@ nil
   two)
 
 (if
-    (nil (complement a)
+    (nil a
        2
        [3
-        (complement b)
+        b
         4])
   one
   two)
@@ -399,7 +410,7 @@ nil
 (do (func-1)
     (func-2))
 
-(do (complement string)
+(do string
     (func-2))
 
 ;; namespaces here!

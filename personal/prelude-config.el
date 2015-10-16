@@ -630,9 +630,9 @@
         clojure-docstring-fill-column 80
         clojure-use-backtracking-indent nil)
 
-  (load-file "../clojure-syntax/indentation.el")
-  (load-file "../clojure-syntax/syntax.el")
-  (load-file "../clojure-syntax/symbols.el")
+  (load-file "~/.emacs.d/clojure-syntax/indentation.el")
+  (load-file "~/.emacs.d/clojure-syntax/syntax.el")
+  (load-file "~/.emacs.d/clojure-syntax/symbols.el")
 
   ;; -- parenthesis highlighting
   ;; TODO: better colors, maybe slightly darker background or symbols?
