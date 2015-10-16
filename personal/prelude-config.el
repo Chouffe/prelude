@@ -24,8 +24,8 @@
 ;; * cmd+ctrl+shift       Org-table mode: insert (down) or delete (up) row/column
 ;; * cmd+alt              Select window to the left/right/down/up
 ;; * cmd+alt+shift        Move (swap with) selected window left/right/down/up
-;; - cmd+alt+ctrl       
-;; - cmd+alt+ctrl+shift 
+;; - cmd+alt+ctrl
+;; - cmd+alt+ctrl+shift
 ;;
 ;; * ctrl+backspace       Backward-kill sexp
 ;; * ctrl+delete          Forward-kill sexp
@@ -56,8 +56,7 @@
   (setq hook nil))
 (setq font-lock-keywords-alist nil)
 
-(load-file (concat "~/.emacs.d.current/profile-"
-                   (getenv "EMACS_PROFILE") ".el"))
+(load-file (concat "~/.emacs.d/profile-mac.el"))
 
 ;; --------------------------------
 ;; TODO: packages not yet looked at
@@ -65,7 +64,7 @@
 ;;
 ;; TODO: from Helm/Projectile (packages we don't want need to be REMOVED from
 ;; prelude-packages):
-;; 
+;;
 ;; ace-window
 ;; easy-kill
 ;; anzu (http://melpa.org/#/anzu)
@@ -84,7 +83,7 @@
 ;; zop-to-char
 ;;
 ;; TODO: Emacs core
-;; 
+;;
 ;; ace-jump-helm-line
 ;; ace-jump-mode
 ;; bind-key
@@ -111,10 +110,10 @@
 ;; helm-themes
 ;;
 ;; TODO: Clojure
-;; 
-;; clj-refactor       
-;; cljr-helm          
-;; clojure-cheatsheet 
+;;
+;; clj-refactor
+;; cljr-helm
+;; clojure-cheatsheet
 ;; clojure-mode-extra-font-lock
 ;; clojure-snippets
 ;; latest-clojure-libraries
@@ -142,11 +141,11 @@
 ;; https://www.masteringemacs.org/article/highlighting-by-word-line-regexp
 ;;
 ;; TODO: syntax highlighting
-;; 
+;;
 ;; http://www.emacswiki.org/emacs/InPlaceAnnotations
 ;;
 ;; TODO: uncategorized
-;; 
+;;
 ;; google
 ;; inflections
 ;; key-chord
@@ -297,7 +296,7 @@
 
 (configure-frame-layout)
 
-(global-set-key (kbd "C-c w") 'configure-frame-layout)              
+(global-set-key (kbd "C-c w") 'configure-frame-layout)
 
 ;; kill buffer in the current window
 (global-set-key (kbd "C-w") (lambda () (interactive) (kill-this-buffer)))
@@ -356,7 +355,7 @@
   :quelpa t
   :demand t
   :config
-  (popwin-mode 1) 
+  (popwin-mode 1)
   (setq popwin:special-display-config
         '(("*Miniedit Help*" :noselect t)
           help-mode
@@ -379,7 +378,7 @@
 ;; ------
 
 ;; -- isearch
-;; make clipboard work 
+;; make clipboard work
 (define-key isearch-mode-map (kbd "A-v") 'isearch-yank-kill)
 (define-key isearch-mode-map (kbd "C-o") 'helm-occur-from-isearch)
 ;; don't need extended actions
@@ -414,10 +413,10 @@
       (forward-line arg)
       (cider-stacktrace-jump))))
 
-(global-set-key (kbd "C->")                          
-                (lambda () (interactive) (navigate-frames-or-rgrep 1)))      
-(global-set-key (kbd "C-<")                    
-                (lambda () (interactive) (navigate-frames-or-rgrep -1)))      
+(global-set-key (kbd "C->")
+                (lambda () (interactive) (navigate-frames-or-rgrep 1)))
+(global-set-key (kbd "C-<")
+                (lambda () (interactive) (navigate-frames-or-rgrep -1)))
 
 ;; -----------
 ;; Smartparens
@@ -481,7 +480,7 @@
 ;; TODO: finish
 ;; ----
 
-;; TODO: put inside! + what 
+;; TODO: put inside! + what
 (defun helm-resume-from ()
   (interactive)
   (helm-resume 1))
@@ -530,7 +529,7 @@
           helm-ff-history-max-length            500 ;; TODO: NOT-CONFIRMED
           helm-ff-skip-boring-files             t   ;; TODO: NOT-SURE
           ;; TODO: NOT-SURE NOT-CONFIRMED
-          ;;  helm-ff-transformer-show-only-basename nil 
+          ;;  helm-ff-transformer-show-only-basename nil
           ;;  helm-reuse-last-window-split-state    t ;; TODO: NOT-SURE
           )
     ;; -- grep coloring
@@ -561,7 +560,7 @@
    ("C-x d"   . helm-projectile-find-dir)
 
    ;; Main idea behind the bindings:
-   ;; 
+   ;;
    ;; ctrl+<letter>  this object
    ;; ctrl+alt+<letter> "open" objects
    ;; ctrl+shift+<letter> all objects
@@ -634,7 +633,7 @@
   (load-file "../clojure-syntax/indentation.el")
   (load-file "../clojure-syntax/syntax.el")
   (load-file "../clojure-syntax/symbols.el")
-  
+
   ;; -- parenthesis highlighting
   ;; TODO: better colors, maybe slightly darker background or symbols?
   ;; subscript as in )1 )2 )3 etc? - this is probably better
@@ -711,7 +710,7 @@
 
 (use-package cider
   :quelpa (:stable t)
-  :demand t           
+  :demand t
   :bind
   ;; TODO: this still doesn't work conflicts with look up symbol + doc
   ;; which should be meta+, . in our case
@@ -772,7 +771,7 @@
 
 ;; (use-package flycheck-clojure
 ;;   :quelpa t
-;;   :demand t           
+;;   :demand t
 ;;   :init
 ;;   (use-package flycheck
 ;;     :quelpa t
@@ -813,8 +812,8 @@
          ("M-g p"   . smerge-prev)
          ("M-g <backspace>" . magit-file-delete)
          ;; (k)eep or (t)ake
-         ("M-g k b" . smerge-keep-base)  
-         ("M-g t b" . smerge-keep-base)   
+         ("M-g k b" . smerge-keep-base)
+         ("M-g t b" . smerge-keep-base)
          ("M-g k m" . smerge-keep-mine)
          ("M-g t m" . smerge-keep-mine)
          ("M-g k o" . smerge-keep-other)
@@ -938,7 +937,7 @@
 ;;   (next-line
 ;;    (- (window-text-height)
 ;;       next-screen-context-lines)))
-;;       
+;;
 ;; (defun sfp-page-up (&optional arg)
 ;;   (interactive "^P")
 ;; ;;  (setq this-command 'previous-line)
