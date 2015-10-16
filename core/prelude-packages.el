@@ -108,8 +108,7 @@
     move-text
     operate-on-number
     smart-mode-line
-    sm
-    artparens
+    smartparens
     smartrep
     undo-tree
     volatile-highlights
